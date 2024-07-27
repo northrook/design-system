@@ -51,7 +51,7 @@ class ColorPalette
         return $this->colors[ $color ] ?? null;
     }
 
-    final public function addColor( string $name, mixed $color, array $curve ) : self {
+    final public function addColor( string $name, mixed $color, array $curve = Color::BASELINE ) : self {
 
         $this->colors[ $name ] = ( new Color( $color, $name, $this->lightnessPadding ) )
             ->generateColor( $curve );
