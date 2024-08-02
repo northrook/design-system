@@ -1,8 +1,8 @@
 <?php
 
-namespace Northrook\DesignSystem\Compiler;
+namespace Northrook\DesignSystem\ColorPalette;
 
-final class Scale
+final class Relative
 {
     public const MINOR_SECOND     = 1.067;
     public const MAJOR_SECOND     = 1.125;

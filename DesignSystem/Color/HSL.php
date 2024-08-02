@@ -1,9 +1,8 @@
 <?php
 
-namespace Northrook\DesignSystem\ColorPalette;
+namespace Northrook\DesignSystem\Color;
 
 use OzdemirBurak\Iris\Color;
-use OzdemirBurak\Iris\Color\Rgb;
 
 class HSL
 {

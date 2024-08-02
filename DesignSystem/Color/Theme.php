@@ -2,8 +2,10 @@
 
 namespace Northrook\DesignSystem\Color;
 
-enum Theme : string
+final class Theme
 {
-    case LIGHT = 'light';
-    case DARK = 'dark';
+    public const
+        LIGHT = 'light',
+        DARK = 'dark',
+        BOTH = true;
 }
