@@ -146,22 +146,25 @@ final class ColorPalette
         $source = \is_string( $color ) ? $color = \strtolower( $color ) : $color;
 
         try {
-            if ( $this::isHue( $color ) ) {
+            if ( \is_scalar( $color ) && $this::isHue( $color ) ) {
                 $this->color = HSL::fromHue( $color );
             }
-            elseif ( \str_starts_with( $color, 'rgb' ) ) {
+            elseif ( \is_scalar( $color ) && \str_starts_with( $color, 'rgb' ) ) {
                 $this->color = HSL::fromRGB( $color );
             }
-            elseif ( $this::isHex( $color ) ) {
+            elseif ( \is_scalar( $color ) && $this::isHex( $color ) ) {
                 $hex         = \substr( \ltrim( $color, "# \n\r\t\v\0" ), 0, 6 );
                 $this->color = HSL::fromHex( $hex );
             }
             elseif ( $hsx = $this->asHSX( $color ) ) {
-                $hsx         = \array_slice( $hsx, 0, 3 );
+
+                $hsx = \array_slice( $hsx, 0, 3 );
+                // dd( $hsx );
                 $this->color = new Iris\Hsl( toString( $hsx, ',' ) );
             }
         }
         catch ( \Throwable $exception ) {
+            dump( $exception );
             Log::exception( $exception, context : [ 'source' => $source ] );
         }
 
@@ -173,12 +176,18 @@ final class ColorPalette
     }
 
     public static function isHue( mixed $color ) : bool {
+
+        if ( !is_scalar( $color ) ) {
+            return false;
+        }
+
         $length = \strlen( (string) $color );
         return \is_int( $color ) && $length >= 1 && $length <= 3;
     }
 
     public static function isHex( mixed $color ) : bool {
-        if ( !\is_string( $color ) ) {
+
+        if ( !\is_string( $color ) || \str_starts_with( $color, '#' ) ) {
             return false;
         }
 
@@ -196,8 +205,8 @@ final class ColorPalette
      */
     private function asHSX( mixed $color ) : false | array {
 
-        if ( !\is_string( $color ) || \str_starts_with( $color, '#' ) ) {
-            return false;
+        if ( \is_array( $color ) && \count( $color ) <= 4 ) {
+            return \array_merge( $color, [ 0, 50, 50 ] );
         }
 
         $color = \strtolower( $color );
