@@ -117,7 +117,7 @@ final class ColorPalette
         return \array_values( $result );
     }
 
-    public function generateRelative( float $scale, ?int $lightness = null, ) : self {
+    public function generateRelative( float $scale, ?int $lightness = null ) : self {
 
         $saturation ??= $this->color->saturation();
 
@@ -154,8 +154,7 @@ final class ColorPalette
             }
             elseif ( $this::isHex( $color ) ) {
                 $hex         = \substr( \ltrim( $color, "# \n\r\t\v\0" ), 0, 6 );
-                $this->color = HSL::fromHex( $color );
-                // dump($color);
+                $this->color = HSL::fromHex( $hex );
             }
             elseif ( $hsx = $this->asHSX( $color ) ) {
                 $hsx         = \array_slice( $hsx, 0, 3 );
@@ -163,7 +162,7 @@ final class ColorPalette
             }
         }
         catch ( \Throwable $exception ) {
-            Log::exception( $exception );
+            Log::exception( $exception, context : [ 'source' => $source ] );
         }
 
         if ( !isset( $this->color ) ) {

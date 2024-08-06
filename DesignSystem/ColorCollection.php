@@ -5,7 +5,6 @@ namespace Northrook\DesignSystem;
 use Northrook\DesignSystem\Color\Theme;
 use Northrook\DesignSystem\ColorPalette\Relative;
 use Northrook\DesignSystem\ColorPalette\Weighted;
-use Northrook\DesignSystem\Compiler\Scale;
 use function Northrook\toString;
 
 class ColorCollection
