@@ -1,0 +1,30 @@
+<code>// simple heading</code>
+<!--
+We may want to have it auto-generate internal spans,
+and sensible word breaks.
+-->
+<h1 class="heading">
+    This is a simple heading.
+</h1>
+
+<code>// simple heading, with sub-heading</code>
+<!--
+The sub-heading is part of the heading, will be read aloud.
+Can be placed before or after, using CSS to set the order.
+-->
+<h1>
+    This is a simple heading.
+    <small>With an internal sub-heading.</small>
+</h1>
+
+<code>// grouped heading</code>
+<!--
+When the sub-heading is visually part of the heading, but shouldn't be read aloud.
+Only <p> is allowed it seems.
+-->
+<hgroup>
+    <h1>
+        This is a simple heading.
+    </h1>
+    <p>With a sub-heading.</p>
+</hgroup>

@@ -12,5 +12,4 @@ final class Relative
     public const AUGMENTED_FOURTH = 1.414;
     public const PERFECT_FIFTH    = 1.5;
     public const GOLDEN_RATIO     = 1.618;
-
 }

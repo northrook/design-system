@@ -12,6 +12,9 @@
 .env
 *.lock
 /index.php
+/*.html
+/*.latte
+/*.css
 
 # Node
 /node_modules/

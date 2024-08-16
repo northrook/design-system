@@ -2,8 +2,8 @@
 
 namespace Northrook\DesignSystem;
 
-use Northrook\Core\Exception\CompileException;
-use Northrook\Core\Trait\PropertyAccessor;
+use Northrook\Exception\CompileException;
+use Northrook\Trait\PropertyAccessor;
 use Northrook\DesignSystem\Color\HSL;
 use Northrook\DesignSystem\Color\Theme;
 use Northrook\Logger\Log;
