@@ -2,16 +2,15 @@
 
 namespace Northrook\DesignSystem;
 
-use Northrook\Exception\CompileException;
-use Northrook\Trait\PropertyAccessor;
 use Northrook\DesignSystem\Color\HSL;
 use Northrook\DesignSystem\Color\Theme;
+use Northrook\Exception\CompileException;
 use Northrook\Logger\Log;
+use Northrook\Trait\PropertyAccessor;
 use OzdemirBurak\Iris\Color as Iris;
-use function Northrook\numberBetween;
-use function Northrook\replaceEach;
-use function Northrook\stringExplode;
-use function Northrook\toString;
+use Support\Num;
+use Support\Str;
+use function Support\toString;
 
 /**
  * @property-read  array $colors
@@ -33,30 +32,32 @@ final class ColorPalette
     public readonly string    $name;
 
     public function __construct(
-        string        $name,
-        mixed         $color,
-        true | string $generate = Theme::LIGHT,
-        int           $padding = 2,
-    ) {
+            string        $name,
+            mixed         $color,
+            true | string $generate = Theme::LIGHT,
+            int           $padding = 2,
+    )
+    {
         $this->useColor( $color );
         $this->name             = $name;
         $this->lightnessPadding = $padding;
         $this->theme            = \in_array( $generate, [ true, 'light', 'dark' ] ) ? $generate : Theme::LIGHT;
     }
 
-    public function __get( string $property ) {
+    public function __get( string $property )
+    {
         return match ( $property ) {
-            'colors' => $this->colors
+            'colors' => $this->colors,
         };
     }
 
-    public function colors( ?string $as = null ) : array {
+    public function colors( ?string $as = null ) : array
+    {
         if ( !$as ) {
             return $this->colors;
         }
 
         if ( \in_array( $as, [ 'hex', 'rgb', 'hsl' ] ) ) {
-
             $array = [];
 
             foreach ( $this->colors as $key => $value ) {
@@ -74,22 +75,22 @@ final class ColorPalette
     }
 
     public function generateWeighted( array $curve, ?int $saturation = null, float $saturationMultiplier = -.7,
-    ) : self {
-
+    ) : self
+    {
         $saturation ??= $this->color->saturation();
 
         foreach ( $curve as $key => $lightness ) {
             $saturation += ( $key * $saturationMultiplier );
 
             $this->colors[ "$this->name-" . $key + 1 . '00' ] = ( clone $this->color )
-                ->saturation( numberBetween( $saturation, 2, 98 ) )
-                ->lightness( numberBetween( $lightness, 2, 98 ) );
+                    ->saturation( Num::clamp( $saturation, 2, 98 ) )
+                    ->lightness( Num::clamp( $lightness, 2, 98 ) );
         }
         return $this;
     }
 
-    private function shadeScale( ?float $value, float $ratio, int $shades = 2 ) : array {
-
+    private function shadeScale( ?float $value, float $ratio, int $shades = 2 ) : array
+    {
         // Assign default
         $value ??= $this->color->lightness( $value );
 
@@ -101,33 +102,30 @@ final class ColorPalette
 
         // Place the central value
         $result[ 0 ] = $value;
-        $shade       = numberBetween( $value, 45, 55 );
+        $shade       = Num::clamp( $value, 45, 55 );
 
         for ( $i = 1; $i <= $shades; $i++ ) {
-
             $bump *= $ratio;
-
 
             $result[ $i * -1 ] = $shade - $bump;
             $result[ $i ]      = $shade + $bump;
         }
         $result = \array_map( '\intval', $result );
-        ksort( $result );
+        \ksort( $result );
 
         return \array_values( $result );
     }
 
-    public function generateRelative( float $scale, ?int $lightness = null ) : self {
-
+    public function generateRelative( float $scale, ?int $lightness = null ) : self
+    {
         $saturation ??= $this->color->saturation();
 
         $shades = $this->shadeScale( $lightness, $scale, 3 );
 
         foreach ( $this->relativeNames( $shades ) as $key => $lightness ) {
-
             $this->colors[ toString( [ $this->name, $key ], '-' ) ] = ( clone $this->color )
-                ->saturation( numberBetween( $saturation, 2, $lightness * 2 ) )
-                ->lightness( numberBetween( $lightness, 2, 98 ) );
+                    ->saturation( Num::clamp( $saturation, 2, $lightness * 2 ) )
+                    ->lightness( Num::clamp( $lightness, 2, 98 ) );
         }
 
         return $this;
@@ -140,8 +138,8 @@ final class ColorPalette
      *
      * @param string|int  $color
      */
-    private function useColor( mixed $color ) : void {
-
+    private function useColor( mixed $color ) : void
+    {
         // Set a $source for referencing, lowercase the $color
         $source = \is_string( $color ) ? $color = \strtolower( $color ) : $color;
 
@@ -157,7 +155,6 @@ final class ColorPalette
                 $this->color = HSL::fromHex( $hex );
             }
             elseif ( $hsx = $this->asHSX( $color ) ) {
-
                 $hsx = \array_slice( $hsx, 0, 3 );
                 // dd( $hsx );
                 $this->color = new Iris\Hsl( toString( $hsx, ',' ) );
@@ -175,8 +172,8 @@ final class ColorPalette
         $this->hue = $this->color->hue();
     }
 
-    public static function isHue( mixed $color ) : bool {
-
+    public static function isHue( mixed $color ) : bool
+    {
         if ( !is_scalar( $color ) ) {
             return false;
         }
@@ -185,8 +182,8 @@ final class ColorPalette
         return \is_int( $color ) && $length >= 1 && $length <= 3;
     }
 
-    public static function isHex( mixed $color ) : bool {
-
+    public static function isHex( mixed $color ) : bool
+    {
         if ( !\is_string( $color ) || \str_starts_with( $color, '#' ) ) {
             return false;
         }
@@ -203,8 +200,8 @@ final class ColorPalette
      *
      * @return false|array{int}
      */
-    private function asHSX( mixed $color ) : false | array {
-
+    private function asHSX( mixed $color ) : false | array
+    {
         if ( \is_array( $color ) && \count( $color ) <= 4 ) {
             return \array_merge( $color, [ 0, 50, 50 ] );
         }
@@ -215,43 +212,44 @@ final class ColorPalette
 
         if ( \str_contains( $color, 'from' ) ) {
             throw new CompileException(
-                $this::class . ' cannot use provided HSX string, as it uses the relative `from` syntax.',
+                    $this::class . ' cannot use provided HSX string, as it uses the relative `from` syntax.',
             );
         }
 
-        $color = replaceEach(
-            [
-                ','   => ' ',
-                '/'   => ' ',
-                '%'   => '',
-                'deg' => '',
-            ],
-            $color,
+        $color = Str::replaceEach(
+                [
+                        ','   => ' ',
+                        '/'   => ' ',
+                        '%'   => '',
+                        'deg' => '',
+                ],
+                $color,
         );
 
-        $color = stringExplode( ' ', $color );
+        $color = Str::explode( $color );
 
         if ( \count( $color ) < 3 || \count( $color ) > 4 ) {
             throw new CompileException(
-                $this::class . ' encountered a malformed HSX value: ' . print_r( $color, true ),
+                    $this::class . ' encountered a malformed HSX value: ' . print_r( $color, true ),
             );
         }
 
         return \array_map( '\intval', $color );
     }
 
-    private function relativeNames( array $colors ) : array {
+    private function relativeNames( array $colors ) : array
+    {
         return \array_combine(
-            [
-                'darkest',
-                'darker',
-                'dark',
-                null,
-                'light',
-                'lighter',
-                'lightest',
-            ],
-            $colors,
+                [
+                        'darkest',
+                        'darker',
+                        'dark',
+                        null,
+                        'light',
+                        'lighter',
+                        'lightest',
+                ],
+                $colors,
         );
     }
 }

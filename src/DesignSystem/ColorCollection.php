@@ -5,18 +5,18 @@ namespace Northrook\DesignSystem;
 use Northrook\DesignSystem\Color\Theme;
 use Northrook\DesignSystem\ColorPalette\Relative;
 use Northrook\DesignSystem\ColorPalette\Weighted;
-use function Northrook\toString;
+use function Support\toString;
 
 class ColorCollection
 {
-    private const SYSTEM = [
-        'atlassian' => [
-            'success' => '4bce97', // green
-            'info'    => '579dff', // blue
-            'notice'  => '9f8fef', // lavender
-            'warning' => 'f5cd47', // gold
-            'danger'  => 'f87168', // red
-        ],
+    private const array SYSTEM = [
+            'atlassian' => [
+                    'success' => '4bce97', // green
+                    'info'    => '579dff', // blue
+                    'notice'  => '9f8fef', // lavender
+                    'warning' => 'f5cd47', // gold
+                    'danger'  => 'f87168', // red
+            ],
     ];
 
     /** @var ColorPalette[] */
@@ -24,17 +24,18 @@ class ColorCollection
 
     public function __construct( private readonly int $lightnessPadding = 2 ) {}
 
-    public function get( string $palette ) : ?ColorPalette {
+    public function get( string $palette ) : ?ColorPalette
+    {
         return $this->palettes[ $palette ] ?? null;
     }
 
     final public function addPalette(
-        string        $name,
-        mixed         $from,
-        array | float $method = Weighted::BASELINE,
-        true | string $generate = Theme::LIGHT,
-    ) : self {
-
+            string        $name,
+            mixed         $from,
+            array | float $method = Weighted::BASELINE,
+            true | string $generate = Theme::LIGHT,
+    ) : self
+    {
         $palette = new ColorPalette( $name, $from, $generate, $this->lightnessPadding, );
 
         $this->palettes[ $name ] = $palette;
@@ -50,10 +51,10 @@ class ColorCollection
     }
 
     final public function systemPalettes(
-        string $theme = 'atlassian',
-        float  $relative = Relative::PERFECT_FOURTH,
-    ) : self {
-
+            string $theme = 'atlassian',
+            float  $relative = Relative::PERFECT_FOURTH,
+    ) : self
+    {
         foreach ( $this::SYSTEM[ $theme ] ?? [] as $name => $color ) {
             $this->addPalette( $name, $color, $relative );
         }
@@ -61,13 +62,13 @@ class ColorCollection
         return $this;
     }
 
-    final public function generateStyles() : string {
+    final public function generateStyles() : string
+    {
         $root  = [];
         $class = [];
 
         foreach ( $this->palettes as $name => $palette ) {
             foreach ( $palette->colors as $key => $value ) {
-
                 $varValue = $value->toHex();
                 $varLast  = array_key_last( $palette->colors );
                 $varFirst = array_key_first( $palette->colors );
@@ -84,21 +85,21 @@ class ColorCollection
         return ':root{' . \implode( '', $root ) . '}' . \implode( '', $class );
     }
 
-
-    final public function getAccentStyles( string $name, array $colors ) : string {
+    final public function getAccentStyles( string $name, array $colors ) : string
+    {
         $root  = [];
         $class = [];
 
         $shades = \array_combine(
-            [
-                'darkest',
-                'darker',
-                'dark',
-                null,
-                'light',
-                'lighter',
-                'lightest',
-            ], $colors,
+                [
+                        'darkest',
+                        'darker',
+                        'dark',
+                        null,
+                        'light',
+                        'lighter',
+                        'lightest',
+                ], $colors,
         );
 
         foreach ( $shades as $key => $value ) {
@@ -112,7 +113,8 @@ class ColorCollection
         return ':root{' . \implode( '', $root ) . '}' . \implode( '', $class );
     }
 
-    final public function getBaselineStyles( array $colors ) : string {
+    final public function getBaselineStyles( array $colors ) : string
+    {
         $root  = [];
         $class = [];
         foreach ( $colors as $key => $value ) {
