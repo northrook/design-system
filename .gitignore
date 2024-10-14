@@ -11,6 +11,9 @@
 # Build data
 .env
 *.lock
+*.cache
+/config/
+/templates
 /index.php
 /*.html
 /*.latte
