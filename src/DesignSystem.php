@@ -190,6 +190,9 @@ final class DesignSystem
             white-space  : nowrap;
             border-width : 0;
         }
+        em {
+          font-style: italic;
+        }
         CSS;
 
     public const string ICONS = <<<CSS
@@ -267,7 +270,7 @@ final class DesignSystem
         $theme ??= $this->config;
 
         foreach ( $theme->variables() as $variable => $value ) {
-            $value = $this->selectorVariable( $variable );
+            // $value = $this->selectorVariable( $value );
             $this->root[$variable] ??= "{$variable}: {$value};";
         }
 

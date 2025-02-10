@@ -137,21 +137,34 @@ class Theme implements DataInterface
         '--danger-lightest' => '#fff6f5',
     ];
 
+    protected const array COLOR = [
+        '--opacity'      => '1',
+        '--color'        => '--baseline-300',
+        '--background'   => '--baseline-900',
+        '--shade'        => '--baseline-600',
+        '--outline'      => '--baseline-500',
+        '--intent-dark'  => '--baseline-400',
+        '--intent'       => '--baseline-500',
+        '--intent-light' => '--baseline-700',
+        '--accent'       => '--primary-500',
+        '--accent-light' => '--primary-600',
+    ];
 
     public function variables() : array
     {
         return [
-                ...$this::LAYOUT,
-                ...$this::TYPOGRAPHY,
-                ...$this::SIZES,
-                ...$this::BOX,
-                ...$this::BASELINE,
-                ...$this::PRIMARY,
-                ...$this::SUCCESS,
-                ...$this::INFO,
-                ...$this::NOTICE,
-                ...$this::WARNING,
-                ...$this::DANGER,
+            ...$this::LAYOUT,
+            ...$this::TYPOGRAPHY,
+            ...$this::SIZES,
+            ...$this::BOX,
+            ...$this::BASELINE,
+            ...$this::PRIMARY,
+            ...$this::SUCCESS,
+            ...$this::INFO,
+            ...$this::NOTICE,
+            ...$this::WARNING,
+            ...$this::DANGER,
+            ...$this::COLOR,
         ];
     }
 
