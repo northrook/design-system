@@ -24,6 +24,8 @@
   },
   "require-dev": {
     "phpstan/phpstan": " @stable",
-    "northrook/dev-env": "dev-main"
+    "northrook/php-cs": "dev-main",
+    "jetbrains/phpstorm-attributes": "^1.2",
+    "tracy/tracy": "*"
   }
 }
