@@ -12,6 +12,7 @@ namespace Northrook;
 use Northrook\DesignSystem\{Compiler\AtomicRules, Theme};
 use Stringable;
 use Support\Escape;
+use Support\Minify\StylesheetMinifier;
 
 // @composer "ozdemirburak/iris": "^3.1",
 
@@ -253,9 +254,9 @@ final class DesignSystem
 
         $generated = \implode( "\n", $this->rules );
 
-        $this->stylesheet->addSource( $generated, ...$source );
+        $this->stylesheet->setSource( $generated, ...$source );
 
-        return $this->stylesheet->minify();
+        return (string) $this->stylesheet->minify();
     }
 
     /**
