@@ -12,7 +12,7 @@ namespace Northrook;
 use Northrook\DesignSystem\{Compiler\AtomicRules, Theme};
 use Stringable;
 use Support\Escape;
-use Support\Minify\StylesheetMinifier;
+use Support\StylesheetMinifier;
 
 // @composer "ozdemirburak/iris": "^3.1",
 

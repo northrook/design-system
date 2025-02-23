@@ -22,10 +22,7 @@
     "northrook/minify": "dev-main"
   },
   "require-dev": {
-    "phpstan/phpstan": " @stable",
-    "northrook/php-cs": "dev-main",
-    "jetbrains/phpstorm-attributes": "^1.2",
-    "tracy/tracy": "*",
+    "northrook/dev": "dev-main",
     "northrook/view-document": "dev-main"
   }
 }
