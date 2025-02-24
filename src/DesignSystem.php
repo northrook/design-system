@@ -11,8 +11,7 @@ namespace Northrook;
 
 use Northrook\DesignSystem\{Compiler\AtomicRules, Theme};
 use Stringable;
-use Support\Escape;
-use Support\StylesheetMinifier;
+use Support\{Escape};
 
 // @composer "ozdemirburak/iris": "^3.1",
 
@@ -218,8 +217,6 @@ final class DesignSystem
 
     protected readonly Theme $config;
 
-    private StylesheetMinifier $stylesheet;
-
     protected array $root = [];
 
     protected array $rules = [];
@@ -227,8 +224,7 @@ final class DesignSystem
     public function __construct(
         ?Theme $config = null,
     ) {
-        $this->config     = $config ?? new Theme();
-        $this->stylesheet = new StylesheetMinifier();
+        $this->config = $config ?? new Theme();
     }
 
     /**
@@ -252,11 +248,7 @@ final class DesignSystem
 
         \array_unshift( $this->rules, $this->generateTheme() );
 
-        $generated = \implode( "\n", $this->rules );
-
-        $this->stylesheet->setSource( $generated, ...$source );
-
-        return (string) $this->stylesheet->minify();
+        return \implode( "\n", [...$this->rules, ...$source] );
     }
 
     /**
@@ -286,7 +278,7 @@ final class DesignSystem
             'none'  => '0',
             default => $variable,
         };
-        // dump( $variable );
+
         return '--'.Escape::string( $variable, ':' );
     }
 
