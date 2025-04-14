@@ -24,6 +24,9 @@ final class AtomicRules
         'absolute.bottom' => ['bottom' => '0'],
         'absolute.left'   => ['left' => '0'],
 
+        'fixed.inset:0'    => ['inset' => '0'],
+        'absolute.inset:0' => ['inset' => '0'],
+
         // Full
         'fixed.top:full'    => ['left' => '0', 'right' => '0'],
         'fixed.bottom:full' => ['left' => '0', 'right' => '0'],
@@ -60,6 +63,7 @@ final class AtomicRules
             'line-height' => '--line-height, 1.5',
         ],
         'flex.reverse'          => ['flex-direction' => 'row-reverse'],
+        'flex.center'           => ['align-items' => 'center', 'justify-content' => 'center'],
         'flex.align:top'        => ['align-items' => 'flex-start'],
         'flex.align:right'      => ['align-items' => 'flex-end'],
         'flex.align:bottom'     => ['align-items' => 'flex-start'],
